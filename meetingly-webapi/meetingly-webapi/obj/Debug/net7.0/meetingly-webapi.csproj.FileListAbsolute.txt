@@ -31,3 +31,6 @@ D:\Mały backup\Programowanie\Projekty\meetingly\meetingly-webapi\meetingly-weba
 D:\Mały backup\Programowanie\Projekty\meetingly\meetingly-webapi\meetingly-webapi\obj\Debug\net7.0\meetingly-webapi.pdb
 D:\Mały backup\Programowanie\Projekty\meetingly\meetingly-webapi\meetingly-webapi\obj\Debug\net7.0\meetingly-webapi.genruntimeconfig.cache
 D:\Mały backup\Programowanie\Projekty\meetingly\meetingly-webapi\meetingly-webapi\obj\Debug\net7.0\ref\meetingly-webapi.dll
+D:\Mały backup\Programowanie\Projekty\Meetingly\meetingly-webapi\meetingly-webapi\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
+D:\Mały backup\Programowanie\Projekty\Meetingly\meetingly-webapi\meetingly-webapi\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\Mały backup\Programowanie\Projekty\Meetingly\meetingly-webapi\meetingly-webapi\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.InMemory.dll

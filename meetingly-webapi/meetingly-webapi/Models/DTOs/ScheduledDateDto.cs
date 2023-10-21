@@ -1,11 +1,9 @@
 ﻿using meetingly_webapi.Enums;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace meetingly_webapi.Models
+namespace meetingly_webapi.Models.DTOs
 {
-    public class ScheduledDate
+    public class ScheduledDateDto
     {
-        public int Id { get; set; }
         public required string Topic { get; set; }
         public string Description { get; set; } = string.Empty;
         public DateTime StartDate { get; set; } = DateTime.UtcNow;
@@ -15,7 +13,5 @@ namespace meetingly_webapi.Models
         public Status Status { get; set; }
         public Source Source { get; set; }
         public int? UserId { get; set; }
-        [ForeignKey("UserId")]
-        public User? User { get; set; }
     }
 }
