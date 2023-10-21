@@ -1,5 +1,6 @@
 ﻿using meetingly_webapi.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace meetingly_webapi.Data
 {
@@ -10,5 +11,14 @@ namespace meetingly_webapi.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseInMemoryDatabase("MeetinglyDb");
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.ScheduledDates)
+                .WithOne()
+                .HasForeignKey(sd => sd.UserId)
+                .IsRequired();
+        }
     }
 }

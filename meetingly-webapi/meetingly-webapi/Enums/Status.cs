@@ -5,7 +5,6 @@
         New,
         Accepted,
         Rejected,
-        JustNow,
         Canceled
     }
 }

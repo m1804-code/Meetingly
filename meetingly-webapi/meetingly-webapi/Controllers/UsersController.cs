@@ -18,13 +18,6 @@ namespace meetingly_webapi.Controllers
         {
             _logger = logger;
             _context = context;
-
-            _context.Users.AddRangeAsync(
-                new User { Name = "John Doe" },
-                new User { Name = "Jane Doe" },
-                new User { Name = "John Smith" });
-
-            _context.SaveChanges();
         }
 
         // GET: api/users

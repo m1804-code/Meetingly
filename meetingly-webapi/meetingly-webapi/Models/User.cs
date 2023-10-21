@@ -11,6 +11,6 @@ namespace meetingly_webapi.Models
         public int Id { get; set; }
 
         public required string Name { get; set; }
-        public ICollection<ScheduledDate> ScheduledDates { get; set; } = new List<ScheduledDate>();
+        public ICollection<ScheduledDate> ScheduledDates { get; } = new List<ScheduledDate>();
     }
 }
