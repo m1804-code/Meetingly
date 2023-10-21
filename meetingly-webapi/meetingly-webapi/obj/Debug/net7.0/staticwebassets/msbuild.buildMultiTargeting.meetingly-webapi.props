@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\meetingly-webapi.props" />
+</Project>
