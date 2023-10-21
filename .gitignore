@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/meetingly-webapi/.vs/
+
+meetingly-webapi/meetingly-webapi/bin/
+
+meetingly-webapi/meetingly-webapi/obj/
