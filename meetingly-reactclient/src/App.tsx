@@ -2,9 +2,12 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { Configuration, UsersApi } from './client'
 
 function App() {
   const [count, setCount] = useState(0)
+  const api = new UsersApi(new Configuration({ basePath: "http://localhost:5275" }));
+  api.getUsers().then((users) => { console.log(users) });
 
   return (
     <>

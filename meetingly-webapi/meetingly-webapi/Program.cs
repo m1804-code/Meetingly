@@ -2,9 +2,9 @@ using meetingly_webapi.Data;
 using meetingly_webapi.Enums;
 using meetingly_webapi.Models;
 using Microsoft.AspNetCore.Http.Json;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Text.Json;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +12,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<MeetinglyDbContext>();
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Meetingly API", Version = "v1" });
+    c.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : null);
+});
 builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-    options.SerializerOptions.MaxDepth = 64;
+    options.SerializerOptions.MaxDepth = 4;
+});
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
 });
 
 var app = builder.Build();
@@ -26,11 +39,10 @@ InitializeDatabase(app);
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Meetingly API");
-    });
+    app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 
