@@ -41,7 +41,7 @@
     chalk "^2.4.2"
     js-tokens "^4.0.0"
 
-"@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.21.0", "@babel/runtime@^7.23.1", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
+"@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.21.0", "@babel/runtime@^7.23.1", "@babel/runtime@^7.23.2", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
   version "7.23.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.2.tgz#062b0ac103261d68a966c4c7baf2ae3e62ec3885"
   integrity sha512-mM8eg4yl5D6i3lu2QKPuPH4FArvJ8KhTofbE7jwMUv9KX5mBvwPAqnV3MlyBNqdp9RyRKP6Yck8TrfYrPvX3bg==
@@ -438,7 +438,7 @@
   resolved "https://pkgs.dev.azure.com/grassvalley-ampp/_packaging/internal-npm-libs/npm/registry/@mui/types/-/types-7.2.6.tgz#d72b9e9eb0032e107e76033932d65c3f731d2608"
   integrity sha1-1yuenrADLhB+dgM5MtZcP3MdJgg=
 
-"@mui/utils@^5.14.13":
+"@mui/utils@^5.14.13", "@mui/utils@^5.14.14":
   version "5.14.14"
   resolved "https://pkgs.dev.azure.com/grassvalley-ampp/_packaging/internal-npm-libs/npm/registry/@mui/utils/-/utils-5.14.14.tgz#7b2a0bcfb44c3376fc81f85500f9bd01706682ac"
   integrity sha1-eyoLz7RMM3b8gfhVAPm9AXBmgqw=
@@ -447,6 +447,17 @@
     "@types/prop-types" "^15.7.7"
     prop-types "^15.8.1"
     react-is "^18.2.0"
+
+"@mui/x-data-grid@^6.16.3":
+  version "6.16.3"
+  resolved "https://pkgs.dev.azure.com/grassvalley-ampp/_packaging/internal-npm-libs/npm/registry/@mui/x-data-grid/-/x-data-grid-6.16.3.tgz#5440b7f56ee2e62a315b36c2a1f900b11da8fa59"
+  integrity sha1-VEC39W7i5ioxWzbCofkAsR2o+lk=
+  dependencies:
+    "@babel/runtime" "^7.23.2"
+    "@mui/utils" "^5.14.14"
+    clsx "^2.0.0"
+    prop-types "^15.8.1"
+    reselect "^4.1.8"
 
 "@nestjs/axios@0.1.0":
   version "0.1.0"
@@ -1986,6 +1997,11 @@ require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
   integrity sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==
+
+reselect@^4.1.8:
+  version "4.1.8"
+  resolved "https://pkgs.dev.azure.com/grassvalley-ampp/_packaging/internal-npm-libs/npm/registry/reselect/-/reselect-4.1.8.tgz#3f5dc671ea168dccdeb3e141236f69f02eaec524"
+  integrity sha1-P13GceoWjczes+FBI29p8C6uxSQ=
 
 resolve-from@^4.0.0:
   version "4.0.0"

@@ -1,36 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
+import { useState } from 'react';
 import './App.css'
-import { Configuration, UsersApi } from './client'
+import { Configuration, User, UsersApi } from './client'
+import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 
 function App() {
-  const [count, setCount] = useState(0)
   const api = new UsersApi(new Configuration({ basePath: "http://localhost:5275" }));
-  api.getUsers().then((users) => { console.log(users) });
+  const [users, setUsers] = useState<User[]>([]);
+  api.getUsers().then((x) => { setUsers(x.data) });
+
+  const rows: GridRowsProp = [
+    { id: 1, col1: 'Hello', col2: 'World' },
+    { id: 2, col1: 'DataGridPro', col2: 'is Awesome' },
+    { id: 3, col1: 'MUI', col2: 'is Amazing' },
+  ];
+
+  const columns: GridColDef[] = [
+    { field: 'col1', headerName: 'Column 1', width: 150 },
+    { field: 'col2', headerName: 'Column 2', width: 150 },
+  ];
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div style={{ height: 300, width: '100%' }}>
+        <DataGrid rows={rows} columns={columns} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
