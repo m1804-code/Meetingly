@@ -1,30 +1,71 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css'
-import { Configuration, User, UsersApi } from './client'
-import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
+import { Configuration, ScheduledDate, User, UsersApi } from './client'
+import { DataGrid, GridColDef, GridRemoveIcon } from '@mui/x-data-grid'
+import EditIcon from '@mui/icons-material/Edit';
+import { Button, Fab} from '@mui/material';
+import UserModal from './components/molecules/UserModal/UserModal';
 
 function App() {
-  const api = new UsersApi(new Configuration({ basePath: "http://localhost:5275" }));
   const [users, setUsers] = useState<User[]>([]);
-  api.getUsers().then((x) => { setUsers(x.data) });
-
-  const rows: GridRowsProp = [
-    { id: 1, col1: 'Hello', col2: 'World' },
-    { id: 2, col1: 'DataGridPro', col2: 'is Awesome' },
-    { id: 3, col1: 'MUI', col2: 'is Amazing' },
-  ];
+  const [openUserModal, setOpenUserModal] = useState(false);
+  useEffect(() => {
+    const api = new UsersApi(new Configuration({ basePath: "http://localhost:5275" }));
+    api.getUsers().then((x) => { setUsers(x.data) });
+  }, []);
 
   const columns: GridColDef[] = [
-    { field: 'col1', headerName: 'Column 1', width: 150 },
-    { field: 'col2', headerName: 'Column 2', width: 150 },
+    { field: 'id', headerName: 'ID', width: 150 },
+    { field: 'name', headerName: 'Name', width: 150 },
+    { field: 'scheduledDates', headerName: 'Scheduled Dates', width: 150,
+    valueGetter: (params) => (params.row.scheduledDates as ScheduledDate[]).length},
+    {
+      field: 'actions',
+      headerName: 'Akcje',
+      width: 150,
+      renderCell: (params) => (
+        <div style={{display: "flex", gap: "5px"}}>
+          <Fab color="error" size="small" aria-label="add" onClick={() => deleteUser(params.row.id)}>
+            <GridRemoveIcon />
+          </Fab>
+          <Fab color="secondary" size="small" aria-label="edit">
+            <EditIcon />
+          </Fab>
+        </div>
+      ),
+    },
   ];
+
+  const deleteUser = (userId: number) => {
+    const api = new UsersApi(new Configuration({ basePath: "http://localhost:5275" }));
+    api.deleteUser(userId)
+    .then(() => {
+        setUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
+    })
+    .catch(error => {
+        console.error("Error deleting user:", error);
+    });
+  };
+
+  
+
+
+  const handleOpenUserModal = () => setOpenUserModal(true);
+  const handleCloseUserModal = () => setOpenUserModal(false);
+
+  
 
   return (
     <>
-      <div style={{ height: 300, width: '100%' }}>
-        <DataGrid rows={rows} columns={columns} />
+      <h1>Meetingly</h1>
+      <div>
+        <Button onClick={handleOpenUserModal} variant="contained" color="success" sx={{margin: 2}}>
+          Dodaj użytkownika
+        </Button>
+        <DataGrid rows={users} columns={columns} />
       </div>
+      <UserModal open={openUserModal} onClose={handleCloseUserModal} setUsers={setUsers}/>
     </>
   )
 }
