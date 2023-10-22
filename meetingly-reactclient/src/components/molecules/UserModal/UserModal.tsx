@@ -7,6 +7,7 @@ export interface UserModalProps {
     open: boolean;
     onClose: () => void;
     setUsers: React.Dispatch<React.SetStateAction<User[]>>;
+    user?: User;
 }
 
 const style = {
@@ -25,34 +26,55 @@ const style = {
     alignItems: "center"
   };
 
-const UserModal: React.FC<UserModalProps> = ({ open, onClose, setUsers }) => {
-    const [name, setName] = useState<string>("");
-    const addUser = () => {
+const UserModal: React.FC<UserModalProps> = ({ open, onClose, setUsers, ...props }) => {
+    const [user, setUser] = useState<User>(props.user ?? {name: ""});
+    const handleClickSave = () => {
         const api = new UsersApi(new Configuration({ basePath: "http://localhost:5275" }));
-        api.addUser({name: name})
-        .then((x) => {
-            setUsers(prevUsers => [...prevUsers, x.data]);
-            setName("");
-            onClose();
-        })
-        .catch(error => {
-            console.error("Error deleting user:", error);
-        });
+
+        if (user.id) {
+                api.updateUser(user.id, {name: user.name})
+                .then(() => {
+                    setUsers(prevUsers => prevUsers.map(u => u.id === user.id ? user : u));
+                    handleOnClose();
+                })
+                .catch(error => {
+                    console.error("Error updating user:", error);
+                });
+        }
+        else {
+                api.addUser({name: user.name})
+                    .then((x) => {
+                        setUsers(prevUsers => [...prevUsers, x.data]);
+                        handleOnClose();
+                    })
+                    .catch(error => {
+                        console.error("Error deleting user:", error);
+                    });
+        }
       };
+    
+    const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUser(prevUser => ({...prevUser, name: event.target.value}));
+    }
+
+    const handleOnClose = () => {
+        setUser({name: ""});
+        onClose();
+    }
     return (
         <Modal
             open={open}
-            onClose={onClose}
+            onClose={handleOnClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Dodaj użytkownika
+                    {props.user ? "Edytuj" : "Dodaj"} użytkownika
                 </Typography>
-                <TextField type="text" variant='outlined' placeholder="Imię" onChange={(e) => setName(e.target.value)} value={name}/>
-                <Button onClick={addUser} variant="contained" color="success">
-                    Dodaj
+                <TextField type="text" variant='outlined' placeholder="Imię" onChange={handleChangeName} value={user.name}/>
+                <Button onClick={handleClickSave} variant="contained" color="success">
+                    {props.user ? "Zapisz" : "Dodaj"}
                 </Button>
             </Box>
         </Modal>

@@ -8,6 +8,7 @@ import { Button, Fab} from '@mui/material';
 import UserModal from './components/molecules/UserModal/UserModal';
 
 function App() {
+  const [user, setUser] = useState<User | undefined>();
   const [users, setUsers] = useState<User[]>([]);
   const [openUserModal, setOpenUserModal] = useState(false);
   useEffect(() => {
@@ -29,13 +30,18 @@ function App() {
           <Fab color="error" size="small" aria-label="add" onClick={() => deleteUser(params.row.id)}>
             <GridRemoveIcon />
           </Fab>
-          <Fab color="secondary" size="small" aria-label="edit">
+          <Fab color="secondary" size="small" aria-label="edit" onClick={() => handleEditUser(params.row)}>
             <EditIcon />
           </Fab>
         </div>
       ),
     },
   ];
+
+  const handleEditUser = (user: User) => {
+    setUser(user);
+    setOpenUserModal(true);
+   }
 
   const deleteUser = (userId: number) => {
     const api = new UsersApi(new Configuration({ basePath: "http://localhost:5275" }));
@@ -52,7 +58,10 @@ function App() {
 
 
   const handleOpenUserModal = () => setOpenUserModal(true);
-  const handleCloseUserModal = () => setOpenUserModal(false);
+  const handleCloseUserModal = () => {
+    setUser(undefined);
+    setOpenUserModal(false)
+  };
 
   
 
@@ -65,7 +74,7 @@ function App() {
         </Button>
         <DataGrid rows={users} columns={columns} />
       </div>
-      <UserModal open={openUserModal} onClose={handleCloseUserModal} setUsers={setUsers}/>
+      <UserModal open={openUserModal} onClose={handleCloseUserModal} setUsers={setUsers} user={user} key={user?.name}/>
     </>
   )
 }
