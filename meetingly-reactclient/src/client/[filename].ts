@@ -1,4 +1,3 @@
-
 After:
 ```typescript
-import { Configuration } from './configuration';
+import { Configuration } from '../configuration';
