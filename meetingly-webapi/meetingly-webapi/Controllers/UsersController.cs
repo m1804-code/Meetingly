@@ -1,8 +1,12 @@
-using meetingly_webapi.Data;
+using MediatR;
 using meetingly_webapi.Models;
 using meetingly_webapi.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using meetingly_webapi.Commands;
+using meetingly_webapi.Queries;
 
 namespace meetingly_webapi.Controllers
 {
@@ -10,44 +14,45 @@ namespace meetingly_webapi.Controllers
     [Route("api/users")]
     public class UsersController : ControllerBase
     {
-
         private readonly ILogger<UsersController> _logger;
-        private readonly MeetinglyDbContext _context;
+        private readonly IMediator _mediator;
 
-        public UsersController(ILogger<UsersController> logger, MeetinglyDbContext context)
+        public UsersController(ILogger<UsersController> logger, IMediator mediator)
         {
             _logger = logger;
-            _context = context;
+            _mediator = mediator;
         }
 
         // GET: api/users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.Include(x=> x.ScheduledDates).ToListAsync();
+            var query = new GetAllUsersQuery();
+            var users = await _mediator.Send(query);
+            return Ok(users);
         }
 
         // GET: api/users/1
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var query = new GetUserByIdQuery(id);
+            var user = await _mediator.Send(query);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return Ok(user);
         }
 
         // POST: api/users
         [HttpPost]
         public async Task<ActionResult<User>> AddUser(UserDto request)
         {
-            var user = new User { Name = request.Name };
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            var command = new CreateUserCommand(request.Name);
+            var user = await _mediator.Send(command);
 
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
@@ -56,28 +61,12 @@ namespace meetingly_webapi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserDto userDto)
         {
-            var user = await _context.Users.FindAsync(id);
+            var command = new UpdateUserCommand(id, userDto.Name);
+            var user = await _mediator.Send(command);
+
             if (user == null)
             {
                 return NotFound();
-            }
-
-            user.Name = userDto.Name;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
             }
 
             return Ok(user);
@@ -87,17 +76,18 @@ namespace meetingly_webapi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            var command = new DeleteUserCommand(id);
+            var result = await _mediator.Send(command);
+
+            if (!result)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
             return NoContent();
         }
+    }
+}
 
         private bool UserExists(int id)
         {
